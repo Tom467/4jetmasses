@@ -1,0 +1,85 @@
+ 
+Jet *jet1, *jet2, *jet3, *jet4, *j1, *j2, *j3, *j4, *pjet;
+
+   int njets = branchJet->GetEntries();
+   int n, r;
+   n = njets;
+   r=4;
+
+    for (Int_t jg=0 ; jg < branchJet->GetEntries(); jg++ ){
+      jet = (Jet*) branchJet->At(jg) ;
+      cout << "Njet: "<< jg <<" "<< "JetPhi:  "<< jet->Phi << " JetEta: "<< jet->Eta << "JetPT: "<< jet->PT << endl;
+    }
+
+   std::vector<bool> v(n);
+   std::fill(v.begin(), v.begin() + r, true);
+
+   do {
+    int ord = 0;
+       for (int i = 0; i < njets; ++i) {
+  if (v[i]) {
+               ord++;
+               if(ord==1) j1 = (Jet *) branchJet->At(i);
+              if(ord==2) j2 = (Jet *) branchJet->At(i);
+               if(ord==3) j3 = (Jet *) branchJet->At(i);
+               if(ord==4) j4 =(Jet *) branchJet->At(i);
+              cout<<" "<<i;
+           }
+       }
+   cout<<endl;
+
+   cout << "ordered jet pt: "<<j1->PT<<" "<<j2->PT<<" "<<j3->PT<<" "<<j4->PT<<endl;
+
+
+
+     if((j1->PT)>10 && (j2->PT)>10  && abs((j1->Eta) - (j2->Eta))<1){
+       inv12->Fill(((j1->P4()+j2->P4()).M()),norm);
+       if((j3->PT)>10 && (j4->PT)>10  && abs((j3->Eta) - (j4->Eta))<1){
+    invm->Fill(((j3->P4()+j4->P4()).M()),norm);
+     if(((((j1->P4()+j2->P4()).M())>60 && ((j3->P4()+j4->P4()).M())>10)  || (((j1->P4()+j2->P4()).M())>10
+&&((j3->P4()+j4->P4()).M())>60)) && ((j1->P4()+j2->P4()).M())<85  && ((j3->P4()+j4->P4()).M())<85 &&
+((j1->P4()+j2->P4()+j3->P4()+j4->P4()).M())<140){
+  invmpair->Fill((j1->P4()+j2->P4()+j3->P4()+j4->P4()).M(),norm);
+
+
+     }
+     }
+    }}
+
+  while (std::prev_permutation(v.begin(), v.end()));
+
+
+
+
+
+
+
+ Jet *genjet1, *genjet2, *genjet3, *genjet4;
+
+    int ngenjets = branchGenJet->GetEntries();
+   if(ngenjets > 3)
+{
+      for(int i = 0; i < ngenjets; i++){
+          genjet1 = (Jet *) branchGenJet->At(i);
+         for(int j = 0; j < ngenjets; j++){
+         genjet2 = (Jet *) branchGenJet->At(1);
+          genjet3 = (Jet *) branchGenJet->At(2);
+          genjet4 = (Jet *) branchGenJet->At(3);
+          float geninvmass =((genjet1->P4())+(genjet2->P4())).M();
+          float geninvmass34 =((genjet3->P4())+(genjet4->P4())).M();
+          float geninvmass14 =((genjet1->P4())+(genjet4->P4())).M();
+          float geninvmass13 =((genjet1->P4())+(genjet3->P4())).M();
+          float geninvmass24 = ((genjet2->P4())+(genjet4->P4())).M();
+          float geninvmass23 = ((genjet2->P4())+(genjet3->P4())).M();
+
+         if(i==0 & j ==3 & (genjet1->PT)>30 & (genjet2->PT)>30 & (genjet3->PT)>30 & (genjet4->PT)>30 & geninvmass>10 &
+         geninvmass<100 & geninvmass34>10& geninvmass34<100)
+          geninvm1234->Fill(geninvmass,geninvmass34);
+          if(i==0 & j ==3 & (genjet1->PT)>30 & (genjet2->PT)>30 & (genjet3->PT)>30 & (genjet4->PT)>30 & geninvmass13>10 &
+          geninvmass13<100 &geninvmass24>10 & geninvmass24<100)
+          geninvm1234->Fill(geninvmass13,geninvmass24);
+          if(i==0 & j ==3 & (genjet1->PT)>30 & (genjet2->PT)>30 & (genjet3->PT)>30 & (genjet4->PT)>30 & geninvmass14>10 &
+          geninvmass14<100 &geninvmass23>10 & geninvmass23<100)
+       geninvm1234->Fill(geninvmass14,geninvmass23);
+
+}  }  }
