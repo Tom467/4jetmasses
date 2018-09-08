@@ -1,4 +1,29 @@
- 
+  for(Int_t i=0;i< 10000;i++){
+  //for(Int_t i=0;i< 10000;i++){
+    // Load selected branches with data from specified event
+    rec->ReadEntry(i);
+    Allnorm=Allnorm+norm ;
+
+    GenParticle *particle;
+    GenParticle *Mparticle;
+    GenParticle *Gparticle;
+    Electron *electron;
+    Photon *photon;
+    Muon *muon;
+
+    Track *track;
+    Track *gtrack;
+    //    Tower *tower;
+
+    Jet *jet;
+    Jet *genjet;
+    TObject *object;
+    TObject *gobject;
+    TObject *objectTrack;
+
+    TLorentzVector momentum;
+
+
 Jet *jet1, *jet2, *jet3, *jet4, *j1, *j2, *j3, *j4, *pjet;
 
    int njets = branchJet->GetEntries();
